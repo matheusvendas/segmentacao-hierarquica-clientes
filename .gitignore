@@ -1,0 +1,7 @@
+# Ignorar todos os arquivos e pastas
+/*
+
+# Exceções (NÃO ignorar)
+!/.gitignore
+!/distancia.ipynb
+!/bases/
