@@ -25,7 +25,9 @@ Analisar a base de vendas (`fato_vendas.csv`), extrair métricas de comportament
    * **Valor (Monetário):** Soma do valor total gasto pelo cliente.
 2. **Feature Scaling:** Aplicação do `PowerTransformer` para lidar com *outliers* e assimetria forte na Recência, garantindo que todas as variáveis tenham exatamente o mesmo peso matemático no cálculo de distâncias.
 3. **Clustering:** Aplicação do método de **Ward** (Agrupamento Hierárquico), que foca em minimizar o aumento da variância dentro de cada cluster a cada passo da junção.
-4. **Definição de Clusters:** Análise visual do Dendrograma e corte determinístico (`maxclust`) para gerar perfis distintos e acionáveis de clientes.
+4. **Definição de Clusters:** A formação final dos grupos foi realizada com a função `fcluster`. Durante a fase de análise, observou-se que cortar a árvore por distância (`criterion='distance', t=15`) ou por limite de grupos (`criterion='maxclust', t=3`) gerava exatamente o mesmo resultado para o volume atual de dados. No entanto, **optou-se formalmente pela abordagem `maxclust` devido ao contexto de aplicação corporativa:**
+   * Se usássemos o critério de `distance`, o modelo ficaria dependente da variância estatística exata desta "fotografia" dos dados. Ao automatizar a execução deste algoritmo em produção (ex: rodando mensalmente com dados novos), pequenas oscilações de mercado fariam a distância `15` gerar subitamente 2, 4 ou 5 clusters, quebrando processos das áreas de negócio.
+   * A escolha por `maxclust=3` traz **previsibilidade operacional**. As áreas de Marketing e CRM preparam "réguas de relacionamento" específicas (ex: campanhas para *VIPs, Regulares e Inativos*). Garantir sempre a saída estrita de 3 segmentos assegura que os fluxos de automação e as estratégias de comunicação da empresa nunca quebrem por flutuações matemáticas.
 
 ## 🚀 Como Executar
 1. Certifique-se de ter o Python e o Jupyter Notebook instalados em seu ambiente.
